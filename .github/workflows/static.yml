@@ -1,4 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Simple workflow for deploying static content to GitHub Pages with quality check
 name: Deploy static content to Pages
 
 on:
@@ -16,14 +16,42 @@ permissions:
   id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  # 1. LINT JOB: Runs the JavaScript linter as the quality gate
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ESLint and Dependencies
+        # This creates a package.json and installs ESLint locally
+        run: |
+          npm init -y
+          npm install eslint
+
+      - name: Create ESLint Configuration
+        # Minimal config to enforce a rule that catches the missing semicolon
+        run: echo '{ "rules": { "semi": ["error", "always"] }, "parserOptions": { "ecmaVersion": 2020 } }' > .eslintrc.json
+
+      - name: Run JS Linter (ESLint)
+        # This command will fail the job if a linting error is found in script.js
+        run: ./node_modules/.bin/eslint script.js
+
+
+  # 2. DEPLOY JOB: Only runs if the lint job is successful
   deploy:
+    # IMPORTANT: The 'needs' keyword creates the dependency chain.
+    needs: lint 
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
