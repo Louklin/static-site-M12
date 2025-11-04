@@ -26,8 +26,3 @@ ul {
     height: 60vh;
     width: 100%;
 }
-
-.ugly-img {
-    width: 100px;
-    height: auto;
-}
