@@ -18,3 +18,8 @@ h2 {
 ul {
     list-style-type: square;
 }
+
+.ugly-img {
+    width: 300px;
+    height: auto;
+}
