@@ -25,3 +25,8 @@ ul {
   margin-right: auto;
   width: 50%;
 }
+
+.ugly-img {
+    width: 200px;
+    height: auto;
+}
