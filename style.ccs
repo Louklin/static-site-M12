@@ -26,14 +26,6 @@ ul {
   width: 50%;
 }
 
-.ui-container {
-    display: flex;
-    justify-content: flex-start;   /* move image toward the left */
-    align-items: center;           /* keep it vertically centered */
-    height: 60vh;
-    width: 100%;
-    padding-left: 10%;             /* optional: shifts slightly toward center */
-}
 
 .ugly-img {
     width: 300px;   /* keep your desired size */
