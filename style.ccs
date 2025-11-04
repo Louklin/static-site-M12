@@ -19,7 +19,15 @@ ul {
     list-style-type: square;
 }
 
+.ui-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    width: 100%;
+}
+
 .ugly-img {
-    width: 200px;
+    width: 300px;
     height: auto;
 }
