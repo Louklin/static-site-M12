@@ -1,0 +1,16 @@
+{
+  "name": "static-site-m12",
+  "version": "1.0.0",
+  "description": "Static site with automated quality checks",
+  "scripts": {
+    "lint": "eslint script.js",
+    "lint:fix": "eslint script.js --fix",
+    "predeploy": "npm run lint",
+    "deploy": "echo 'Deployment would happen here'"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
+  "type": "module"
+}
+
