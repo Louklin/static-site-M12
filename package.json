@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Static site with automated quality checks",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
     "lint": "eslint script.js",
     "lint:fix": "eslint script.js --fix",
     "predeploy": "npm run lint",
@@ -14,3 +14,4 @@
   },
   "type": "module" 
 }
+
