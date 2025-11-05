@@ -22,8 +22,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Lint job: quality gate before deploy
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Create ESLint Configuration
+        run: |
+          cat > .eslintrc.json << 'EOF'
+          {
+            "env": { "browser": true, "es2021": true },
+            "rules": { "semi": ["error", "always"] },
+            "parserOptions": { "ecmaVersion": 2020 }
+          }
+          EOF
+
+      - name: Run JS Linter (ESLint)
+        run: npx --yes eslint@8.57.0 --no-eslintrc --config .eslintrc.json script.js
+
   # Single deploy job since we're just deploying
   deploy:
+    needs: lint
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
