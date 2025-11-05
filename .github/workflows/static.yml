@@ -66,8 +66,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run Jest tests (no install, use npx)
-        run: npx --yes jest@29.7.0 tests/effects.test.js
+      - name: Run Jest tests (ESM support)
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
+        run: npx --yes jest@29.7.0
 
   # Single deploy job since we're just deploying
   deploy:
