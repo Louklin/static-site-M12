@@ -17,3 +17,6 @@ function changeBackgroundColor() {
 showMessage();
     CHANGE:    const p = document.getElementById('message') // Ommitting JS Linter Test TO    const p = document.getElementById('message'); // Ommitting JS Linter Test
 
+JS testing framework and test job --
+Located in tests/demoFail.test.js
+Demonstration of a failing test. Remove .skip to see CI fail test
