@@ -33,23 +33,19 @@ jobs:
         with:
           node-version: '20'
 
-      # Skip installing repo dependencies to avoid failing on malformed package.json
-      # We will run ESLint directly via npx with an explicit version.
+      - name: Install ESLint and Dependencies
+        # This creates a package.json and installs ESLint locally
+        run: |
+          npm init -y
+          npm install eslint
 
       - name: Create ESLint Configuration
         # Minimal config to enforce a rule that catches the missing semicolon
-        run: |
-          cat > .eslintrc.json << 'EOF'
-          {
-            "env": { "browser": true, "es2021": true },
-            "rules": { "semi": ["error", "always"] },
-            "parserOptions": { "ecmaVersion": 2020 }
-          }
-          EOF
+        run: echo '{ "rules": { "semi": ["error", "always"] }, "parserOptions": { "ecmaVersion": 2020 } }' > .eslintrc.json
 
       - name: Run JS Linter (ESLint)
-        # Use npx to run ESLint and ignore repo configs/package.json
-        run: npx --yes eslint@8.57.0 --no-eslintrc --config .eslintrc.json script.js
+        # This command will fail the job if a linting error is found in script.js
+        run: ./node_modules/.bin/eslint script.js
 
 
   # 2. DEPLOY JOB: Only runs if the lint job is successful
