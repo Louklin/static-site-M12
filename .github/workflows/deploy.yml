@@ -1,29 +1,25 @@
-# Simple workflow for deploying static content to GitHub Pages with quality check
+# Deploy static content to GitHub Pages with lint + test checks
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # 1. LINT JOB: Runs the JavaScript linter as the quality gate
+
+  # 1) LINT JOB
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,44 +27,65 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
-      - name: Install ESLint and Dependencies
-        # This creates a package.json and installs ESLint locally
+      - name: Install ESLint and dependencies
         run: |
           npm init -y
           npm install eslint
 
-        # Minimal config to enforce a rule that catches the missing semicolon
       - name: Create ESLint Configuration
         run: |
           echo '{ "rules": { "semi": ["error", "always"] }, "parserOptions": { "ecmaVersion": 2020 } }' > .eslintrc.json
 
-
-
-      - name: Run JS Linter (ESLint)
-        # This command will fail the job if a linting error is found in script.js
+      - name: Run JS Linter
         run: ./node_modules/.bin/eslint script.js
 
 
-  # 2. DEPLOY JOB: Only runs if the lint job is successful
+
+  # 2) TEST JOB — runs only if lint passes
+  test:
+    runs-on: windows-latest
+    needs: lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install jest --save-dev
+
+      - name: Run Jest Tests
+        run: npm test
+
+
+
+  # 3) DEPLOY — only runs if lint + test both pass
   deploy:
-    # IMPORTANT: The 'needs' keyword creates the dependency chain.
-    needs: lint 
+    needs: [lint, test]
+    runs-on: windows-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: "."
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
