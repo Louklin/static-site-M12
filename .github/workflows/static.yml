@@ -67,7 +67,7 @@ jobs:
           node-version: '20'
 
       - name: Run Jest tests (no install, use npx)
-        run: npx --yes jest@29.7.0 __tests__/effects.test.js
+        run: npx --yes jest@29.7.0 tests/effects.test.js
 
   # Single deploy job since we're just deploying
   deploy:
