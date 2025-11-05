@@ -48,8 +48,8 @@ jobs:
           EOF
 
       - name: Run JS Linter (ESLint)
-        # Use npx to run ESLint without relying on local package.json
-        run: npx --yes eslint@8.57.0 script.js
+        # Use npx to run ESLint and ignore repo configs/package.json
+        run: npx --yes eslint@8.57.0 --no-eslintrc --config .eslintrc.json script.js
 
 
   # 2. DEPLOY JOB: Only runs if the lint job is successful
