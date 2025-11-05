@@ -1,7 +1,7 @@
 
 // script.js
 function showMessage() {
-    const p = document.getElementById('message') // Ommitting JS Linter Test
+    const p = document.getElementById('message'); // Ommitting JS Linter Test
     if (p) {
         p.textContent = "The JS is running and the UI is under review!";
     }
