@@ -39,9 +39,12 @@ jobs:
           npm init -y
           npm install eslint
 
-      - name: Create ESLint Configuration
         # Minimal config to enforce a rule that catches the missing semicolon
-        run: echo '{ "rules": { "semi": ["error", "always"] }, "parserOptions": { "ecmaVersion": 2020 } }' > .eslintrc.json
+      - name: Create ESLint Configuration
+        run: |
+          echo '{ "rules": { "semi": ["error", "always"] }, "parserOptions": { "ecmaVersion": 2020 } }' > .eslintrc.json
+
+
 
       - name: Run JS Linter (ESLint)
         # This command will fail the job if a linting error is found in script.js
