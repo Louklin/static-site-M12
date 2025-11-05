@@ -1,0 +1,34 @@
+# Workflow to run JS linter on every push/PR (no deploy)
+name: Lint JavaScript
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Create ESLint Configuration
+        run: |
+          cat > .eslintrc.json << 'EOF'
+          {
+            "env": { "browser": true, "es2021": true },
+            "rules": { "semi": ["error", "always"] },
+            "parserOptions": { "ecmaVersion": 2020 }
+          }
+          EOF
+
+      - name: Run JS Linter (ESLint)
+        run: npx --yes eslint@8.57.0 --no-eslintrc --config .eslintrc.json script.js
+
+
