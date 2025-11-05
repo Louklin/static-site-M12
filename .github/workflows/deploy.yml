@@ -33,11 +33,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install ESLint and Dependencies
-        # This creates a package.json and installs ESLint locally
-        run: |
-          npm init -y
-          npm install eslint
+      - name: Install dependencies
+        run: npm ci
 
       - name: Create ESLint Configuration
         # Minimal config to enforce a rule that catches the missing semicolon
@@ -52,7 +49,7 @@ jobs:
 
       - name: Run JS Linter (ESLint)
         # This command will fail the job if a linting error is found in script.js
-        run: ./node_modules/.bin/eslint script.js
+        run: npx eslint script.js
 
 
   # 2. DEPLOY JOB: Only runs if the lint job is successful
