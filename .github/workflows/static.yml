@@ -34,7 +34,13 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Prepare isolated lint workspace
+        run: |
+          mkdir -p lint-tmp
+          cp script.js lint-tmp/
+
       - name: Create ESLint Configuration
+        working-directory: lint-tmp
         run: |
           cat > .eslintrc.json << 'EOF'
           {
@@ -45,6 +51,7 @@ jobs:
           EOF
 
       - name: Run JS Linter (ESLint)
+        working-directory: lint-tmp
         run: npx --yes eslint@8.57.0 --no-eslintrc --config .eslintrc.json script.js
 
   # Single deploy job since we're just deploying
